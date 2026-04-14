@@ -13,7 +13,8 @@ import Stats from "@/components/Stats";
 import FilterTabs from "@/components/FilterTabs";
 import WordOfDay from "@/components/WordOfDay";
 import Toast from "@/components/Toast";
-import { getTodayStr } from "@/lib/utils";
+import { getTodayStr, formatDateLabel } from "@/lib/utils";
+import { addDays, format, parseISO } from "date-fns";
 import type { Task } from "@/types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -208,6 +209,37 @@ export default function DashboardPage() {
     }
   }, [pendingTasks, tasks, mutateTasks, mutateStats, showToast]);
 
+  const deferDate = format(addDays(parseISO(selectedDate), 1), "yyyy-MM-dd");
+
+  const handleDefer = useCallback(
+    async (id: string, note?: string) => {
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      let newDescription = task.description || null;
+      if (note) {
+        const noteText = `[Deferred from ${selectedDate}: ${note}]`;
+        newDescription = newDescription ? `${newDescription}\n${noteText}` : noteText;
+      }
+
+      mutateTasks(tasks.filter((t) => t.id !== id), false);
+
+      try {
+        await fetch(`/api/tasks/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date: deferDate, description: newDescription }),
+        });
+        mutateTasks();
+        mutateStats();
+        showToast(`Task deferred to ${formatDateLabel(deferDate)}`, "default");
+      } catch {
+        mutateTasks();
+      }
+    },
+    [tasks, mutateTasks, mutateStats, selectedDate, deferDate, showToast]
+  );
+
   const handleClearDone = useCallback(async () => {
     if (completedTasks.length === 0) return;
 
@@ -334,9 +366,11 @@ export default function DashboardPage() {
                   <TaskItem
                     key={task.id}
                     task={task}
+                    deferDate={deferDate}
                     onToggle={handleToggle}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
+                    onDefer={handleDefer}
                   />
                 ))}
 
@@ -359,9 +393,11 @@ export default function DashboardPage() {
                       <TaskItem
                         key={task.id}
                         task={task}
+                        deferDate={deferDate}
                         onToggle={handleToggle}
                         onUpdate={handleUpdate}
                         onDelete={handleDelete}
+                        onDefer={handleDefer}
                       />
                     ))}
                   </div>

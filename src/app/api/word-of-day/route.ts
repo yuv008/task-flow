@@ -27,7 +27,7 @@ export async function GET(req: Request) {
             "- meaning: a clear, concise definition in one sentence\n" +
             "- sentence: a natural example sentence using the word\n\n" +
             "Rules:\n" +
-            "1. Pick a word that is useful, interesting, and not too common\n" +
+            "1. Pick a word that a confident English speaker would actually use in daily conversation or writing. Avoid words that are too basic (e.g. happy, run, fast) AND avoid rare or literary words no one uses casually (e.g. mellifluous, pusillanimous). Aim for the sweet spot: words like 'candid', 'deliberate', 'subtle', 'compelling', 'resilient', 'articulate', 'concise', 'pragmatic', 'nuanced'.\n" +
             "2. Return ONLY valid JSON — no explanation, no markdown, no extra text",
         },
         {

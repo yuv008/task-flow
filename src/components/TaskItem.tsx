@@ -1,21 +1,25 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { cn, priorityColor } from "@/lib/utils";
+import { cn, priorityColor, formatDateLabel } from "@/lib/utils";
 import type { Task } from "@/types";
 
 interface TaskItemProps {
   task: Task;
+  deferDate: string;
   onToggle: (id: string, completed: boolean) => void;
   onUpdate: (id: string, data: Partial<Task>) => void;
   onDelete: (id: string) => void;
+  onDefer: (id: string, note?: string) => void;
 }
 
 export default function TaskItem({
   task,
+  deferDate,
   onToggle,
   onUpdate,
   onDelete,
+  onDefer,
 }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
@@ -23,6 +27,8 @@ export default function TaskItem({
   const [showMenu, setShowMenu] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showDeferPanel, setShowDeferPanel] = useState(false);
+  const [deferNote, setDeferNote] = useState("");
 
   const handleEnhance = useCallback(async () => {
     if (!editTitle.trim() || enhancing) return;
@@ -73,6 +79,46 @@ export default function TaskItem({
         task.priority === "medium" && "border-amber-400",
         task.priority === "low" && "border-blue-400"
       );
+
+  if (showDeferPanel) {
+    return (
+      <div className={cn("card animate-fade-in p-4", priorityBorderClass)}>
+        <p className="mb-2 text-sm font-medium text-surface-700 dark:text-surface-300">
+          Defer &ldquo;{task.title}&rdquo; to{" "}
+          <span className="font-semibold">{formatDateLabel(deferDate)}</span>?
+        </p>
+        <textarea
+          value={deferNote}
+          onChange={(e) => setDeferNote(e.target.value)}
+          placeholder="Why? (optional)"
+          className="input-field resize-none text-sm"
+          rows={2}
+          autoFocus
+        />
+        <div className="mt-3 flex items-center justify-end gap-2">
+          <button
+            onClick={() => {
+              setShowDeferPanel(false);
+              setDeferNote("");
+            }}
+            className="btn-ghost text-xs"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              onDefer(task.id, deferNote.trim() || undefined);
+              setShowDeferPanel(false);
+              setDeferNote("");
+            }}
+            className="btn-primary text-xs py-1.5"
+          >
+            Defer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (isEditing) {
     return (
@@ -254,7 +300,7 @@ export default function TaskItem({
                 onClick={() => setShowMenu(false)}
                 aria-hidden="true"
               />
-              <div className="absolute right-0 top-8 z-20 w-36 animate-fade-in rounded-lg border dark:border-surface-700 bg-white dark:bg-surface-800 py-1 shadow-lg">
+              <div className="absolute right-0 top-8 z-20 w-44 animate-fade-in rounded-lg border dark:border-surface-700 bg-white dark:bg-surface-800 py-1 shadow-lg">
                 <button
                   onClick={() => {
                     setShowMenu(false);
@@ -277,6 +323,30 @@ export default function TaskItem({
                     <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                   </svg>
                   Edit
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowDeferPanel(true);
+                  }}
+                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                  Defer to tomorrow
                 </button>
                 <button
                   onClick={() => {
