@@ -30,21 +30,48 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile overlay */}
+      {/* Mobile overlay — covers full screen including header */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
         className={cn(
-          "fixed left-0 top-14 z-50 h-[calc(100vh-3.5rem)] w-64 border-r bg-white transition-transform duration-200 lg:static lg:translate-x-0",
+          // Mobile: full-height drawer from top, above everything
+          "fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl",
+          "transition-transform duration-300 ease-in-out",
+          // Desktop: static in the flex layout, no shadow
+          "lg:static lg:inset-y-auto lg:z-auto lg:w-64 lg:shadow-none lg:translate-x-0 lg:border-r",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex h-full flex-col p-4 overflow-y-auto scrollbar-thin">
+        {/* Mobile header row with close button */}
+        <div className="flex items-center justify-between border-b px-4 py-3 lg:hidden">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+              </svg>
+            </div>
+            <span className="text-sm font-semibold text-surface-900">TaskFlow</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-surface-400 hover:bg-surface-100 hover:text-surface-600"
+            aria-label="Close sidebar"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex h-[calc(100%-3.25rem)] flex-col p-4 overflow-y-auto scrollbar-thin lg:h-full">
           {/* Stats */}
           {stats && (
             <div className="mb-6 space-y-3">
