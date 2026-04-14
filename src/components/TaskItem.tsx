@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { cn, priorityColor } from "@/lib/utils";
 import type { Task } from "@/types";
 
@@ -21,6 +21,25 @@ export default function TaskItem({
   const [editTitle, setEditTitle] = useState(task.title);
   const [editDesc, setEditDesc] = useState(task.description || "");
   const [showMenu, setShowMenu] = useState(false);
+  const [enhancing, setEnhancing] = useState(false);
+
+  const handleEnhance = useCallback(async () => {
+    if (!editTitle.trim() || enhancing) return;
+    setEnhancing(true);
+    try {
+      const res = await fetch("/api/ai/enhance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: editTitle.trim(), description: editDesc.trim() }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.description) setEditDesc(data.description);
+      }
+    } finally {
+      setEnhancing(false);
+    }
+  }, [editTitle, editDesc, enhancing]);
 
   const handleSave = () => {
     if (editTitle.trim()) {
@@ -70,9 +89,25 @@ export default function TaskItem({
           onChange={(e) => setEditDesc(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Add a description..."
-          className="input-field mb-3 resize-none text-sm"
+          className="input-field resize-none text-sm"
           rows={2}
         />
+        <button
+          type="button"
+          onClick={handleEnhance}
+          disabled={enhancing || !editTitle.trim()}
+          className="mb-3 mt-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-50 disabled:opacity-50"
+        >
+          {enhancing ? (
+            <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          ) : (
+            <span>✨</span>
+          )}
+          {enhancing ? "Enhancing…" : "Enhance with AI"}
+        </button>
         <div className="flex items-center gap-2">
           <select
             value={task.priority}

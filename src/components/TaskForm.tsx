@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 interface TaskFormProps {
   date: string;
@@ -19,7 +19,26 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("medium");
+  const [enhancing, setEnhancing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleEnhance = useCallback(async () => {
+    if (!title.trim() || enhancing) return;
+    setEnhancing(true);
+    try {
+      const res = await fetch("/api/ai/enhance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: title.trim(), description: description.trim() }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.description) setDescription(data.description);
+      }
+    } finally {
+      setEnhancing(false);
+    }
+  }, [title, description, enhancing]);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -106,6 +125,24 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
         className="mt-2 w-full resize-none border-0 bg-transparent text-xs text-surface-600 placeholder:text-surface-400 focus:outline-none focus:ring-0"
         rows={2}
       />
+      {title.trim() && (
+        <button
+          type="button"
+          onClick={handleEnhance}
+          disabled={enhancing}
+          className="mt-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-50 disabled:opacity-50"
+        >
+          {enhancing ? (
+            <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          ) : (
+            <span>✨</span>
+          )}
+          {enhancing ? "Enhancing…" : "Enhance with AI"}
+        </button>
+      )}
       <div className="mt-3 flex items-center justify-between border-t pt-3">
         <div className="flex items-center gap-1">
           {(["low", "medium", "high"] as const).map((p) => (
