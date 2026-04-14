@@ -11,8 +11,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Use the date as a seed hint so the word feels consistent per day
-  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  // Use the client's local date so the word updates at midnight in the user's timezone
+  const url = new URL(req.url);
+  const today = url.searchParams.get("date") || new Date().toISOString().slice(0, 10);
 
   try {
     const completion = await groq.chat.completions.create({
