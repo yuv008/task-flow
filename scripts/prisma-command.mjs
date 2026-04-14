@@ -14,6 +14,13 @@ const prismaArgs = process.argv.slice(2);
 const databaseUrl = process.env.DATABASE_URL ?? "";
 
 function resolveSchemaPath(url) {
+  if (!url) {
+    // No DATABASE_URL in the environment (e.g. CI build before DB is provisioned).
+    // Default to the PostgreSQL schema so `prisma generate` can still produce the
+    // client without a live connection.
+    return "prisma/schema.postgresql.prisma";
+  }
+
   if (url.startsWith("file:")) {
     return "prisma/schema.sqlite.prisma";
   }

@@ -12,13 +12,16 @@ interface WordData {
 
 const CACHE_KEY = "word_of_day";
 
+function getLocalDate(): string {
+  return new Date().toLocaleDateString("en-CA"); // "YYYY-MM-DD" in local timezone
+}
+
 function getCached(): WordData | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const data: WordData = JSON.parse(raw);
-    const today = new Date().toISOString().slice(0, 10);
-    return data.date === today ? data : null;
+    return data.date === getLocalDate() ? data : null;
   } catch {
     return null;
   }
@@ -46,7 +49,7 @@ export default function WordOfDay() {
       return;
     }
 
-    fetch("/api/word-of-day")
+    fetch(`/api/word-of-day?date=${getLocalDate()}`)
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
