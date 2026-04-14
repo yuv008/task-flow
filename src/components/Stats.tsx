@@ -32,7 +32,21 @@ export default function Stats({ data }: StatsProps) {
       <div className="flex items-end gap-1.5">
         {data.last7Days.map((day) => (
           <div key={day.date} className="flex flex-1 flex-col items-center gap-1">
-            <div className="relative flex h-20 w-full items-end justify-center">
+            {/* Percentage label above bar — hidden when no tasks */}
+            <div className="flex h-5 items-end justify-center">
+              {day.total > 0 && (
+                <span className="text-[9px] font-medium leading-none text-surface-400">
+                  {day.percentage === 100 ? (
+                    <span className="text-emerald-500" title="All done!">✓</span>
+                  ) : (
+                    `${day.percentage}%`
+                  )}
+                </span>
+              )}
+            </div>
+
+            {/* Bar area */}
+            <div className="relative flex h-28 w-full items-end justify-center">
               {/* Background bar (total) */}
               <div
                 className="absolute bottom-0 w-full rounded-t-md bg-surface-100 transition-all"
@@ -46,6 +60,7 @@ export default function Stats({ data }: StatsProps) {
                 }}
               />
             </div>
+
             <span className="text-[10px] text-surface-400">
               {format(new Date(day.date + "T12:00:00"), "EEE")}
             </span>

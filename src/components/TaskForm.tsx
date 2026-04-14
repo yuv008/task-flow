@@ -10,9 +10,11 @@ interface TaskFormProps {
     priority: string;
     date: string;
   }) => void;
+  /** Increment this value to programmatically open the form (e.g., keyboard shortcut). */
+  openTrigger?: number;
 }
 
-export default function TaskForm({ date, onSubmit }: TaskFormProps) {
+export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -24,6 +26,13 @@ export default function TaskForm({ date, onSubmit }: TaskFormProps) {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  // Open the form whenever openTrigger is incremented externally
+  useEffect(() => {
+    if (openTrigger && openTrigger > 0) {
+      setIsOpen(true);
+    }
+  }, [openTrigger]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +75,7 @@ export default function TaskForm({ date, onSubmit }: TaskFormProps) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           <line x1="12" y1="5" x2="12" y2="19" />
           <line x1="5" y1="12" x2="19" y2="12" />

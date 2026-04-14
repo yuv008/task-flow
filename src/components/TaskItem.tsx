@@ -44,9 +44,19 @@ export default function TaskItem({
     }
   };
 
+  // Determine the left border color based on priority and completion state
+  const priorityBorderClass = task.completed
+    ? "border-l-4 border-surface-200"
+    : cn(
+        "border-l-4",
+        task.priority === "high" && "border-red-400",
+        task.priority === "medium" && "border-amber-400",
+        task.priority === "low" && "border-blue-400"
+      );
+
   if (isEditing) {
     return (
-      <div className="card animate-fade-in p-4">
+      <div className={cn("card animate-fade-in p-4", priorityBorderClass)}>
         <input
           type="text"
           value={editTitle}
@@ -67,7 +77,9 @@ export default function TaskItem({
           <select
             value={task.priority}
             onChange={(e) =>
-              onUpdate(task.id, { priority: e.target.value as any })
+              onUpdate(task.id, {
+                priority: e.target.value as Task["priority"],
+              })
             }
             className="input-field w-auto text-xs"
           >
@@ -98,7 +110,8 @@ export default function TaskItem({
     <div
       className={cn(
         "group card animate-slide-up p-3 transition-all hover:shadow-md",
-        task.completed && "opacity-60"
+        priorityBorderClass,
+        task.completed && "opacity-50"
       )}
     >
       <div className="flex items-start gap-3">
@@ -108,9 +121,10 @@ export default function TaskItem({
           className={cn(
             "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all",
             task.completed
-              ? "border-brand-500 bg-brand-500 animate-check"
+              ? "border-emerald-500 bg-emerald-500 animate-check"
               : "border-surface-300 hover:border-brand-400"
           )}
+          aria-label={task.completed ? "Mark as pending" : "Mark as complete"}
         >
           {task.completed && (
             <svg
@@ -123,6 +137,7 @@ export default function TaskItem({
               strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
@@ -166,7 +181,15 @@ export default function TaskItem({
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-surface-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-surface-100 hover:text-surface-600"
+            className={cn(
+              "flex h-7 w-7 items-center justify-center rounded-md text-surface-400 transition-opacity hover:bg-surface-100 hover:text-surface-600",
+              // Always visible on small screens (touch devices), hover-revealed on desktop
+              "sm:opacity-0 sm:group-hover:opacity-100",
+              // On mobile / touch screens: always visible
+              "opacity-100"
+            )}
+            aria-label="Task options"
+            aria-expanded={showMenu}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -174,6 +197,7 @@ export default function TaskItem({
               height="14"
               viewBox="0 0 24 24"
               fill="currentColor"
+              aria-hidden="true"
             >
               <circle cx="12" cy="5" r="2" />
               <circle cx="12" cy="12" r="2" />
@@ -186,6 +210,7 @@ export default function TaskItem({
               <div
                 className="fixed inset-0 z-10"
                 onClick={() => setShowMenu(false)}
+                aria-hidden="true"
               />
               <div className="absolute right-0 top-8 z-20 w-36 animate-fade-in rounded-lg border bg-white py-1 shadow-lg">
                 <button
@@ -205,6 +230,7 @@ export default function TaskItem({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    aria-hidden="true"
                   >
                     <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                   </svg>
@@ -227,6 +253,7 @@ export default function TaskItem({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    aria-hidden="true"
                   >
                     <path d="M3 6h18" />
                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
