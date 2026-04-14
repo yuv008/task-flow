@@ -19,8 +19,8 @@ export async function POST(req: Request) {
     }
 
     const prompt = description?.trim()
-      ? `Task: "${title}"\nCurrent description: "${description}"\n\nImprove this description:\n1. Make it clear and specific\n2. Make it actionable\n3. Keep it concise (2–3 sentences max)\n\nReturn only the improved description text.`
-      : `Task: "${title}"\n\nWrite a description for this task:\n1. Clear and specific\n2. Actionable (start with a verb)\n3. Concise (2–3 sentences max)\n\nReturn only the description text.`;
+      ? `Task: "${title}"\nCurrent description: "${description}"\n\nRewrite this as a numbered list of clear, actionable steps. Use nested points (e.g. 1a, 1b) only if a step has sub-parts. Return only the formatted description, nothing else.`
+      : `Task: "${title}"\n\nWrite a description as a numbered list of clear, actionable steps. Use nested points (e.g. 1a, 1b) only if a step has sub-parts. Return only the formatted description, nothing else.`;
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -28,7 +28,12 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are a productivity assistant. Your job:\n1. Write task descriptions that are:\n   - Clear and specific\n   - Actionable (starts with a verb)\n   - Concise (2–3 sentences max)\n2. Return only the description text — no explanations, no labels.",
+            "You are a productivity assistant. Format task descriptions as numbered steps.\n" +
+            "Rules:\n" +
+            "1. Each step must start with a number (e.g. 1., 2., 3.)\n" +
+            "2. Add nested sub-points (e.g. 1a., 1b.) only when a step has distinct parts\n" +
+            "3. Keep each point short and actionable — start with a verb\n" +
+            "4. Return only the formatted list — no intro, no explanation, no extra text",
         },
         { role: "user", content: prompt },
       ],

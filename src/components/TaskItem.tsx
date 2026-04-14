@@ -202,11 +202,11 @@ export default function TaskItem({
             />
           </div>
           {task.description && (
-            <p
+            <div
               onClick={() => setIsExpanded(!isExpanded)}
               className={cn(
-                "mt-0.5 text-xs text-surface-500 dark:text-surface-400 cursor-pointer select-none",
-                !isExpanded && "line-clamp-2",
+                "mt-0.5 text-xs text-surface-500 dark:text-surface-400 cursor-pointer select-none whitespace-pre-line",
+                !isExpanded && "line-clamp-3",
                 task.completed && "line-through"
               )}
               title={isExpanded ? "Click to collapse" : "Click to expand"}
@@ -215,7 +215,7 @@ export default function TaskItem({
               {!isExpanded && (
                 <span className="ml-1 text-surface-400 dark:text-surface-500">↓</span>
               )}
-            </p>
+            </div>
           )}
         </div>
 
