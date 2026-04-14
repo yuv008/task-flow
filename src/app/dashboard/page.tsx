@@ -229,7 +229,7 @@ export default function DashboardPage() {
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-50">
+      <div className="flex min-h-screen items-center justify-center bg-surface-50 dark:bg-surface-950">
         <div className="flex flex-col items-center gap-3">
           <svg
             className="h-8 w-8 animate-spin text-brand-600"
@@ -251,7 +251,7 @@ export default function DashboardPage() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
             />
           </svg>
-          <span className="text-sm text-surface-400">Loading...</span>
+          <span className="text-sm text-surface-400 dark:text-surface-500">Loading...</span>
         </div>
       </div>
     );
@@ -267,7 +267,7 @@ export default function DashboardPage() {
   const showTaskForm = filter !== "done";
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface-50">
+    <div className="flex min-h-screen flex-col bg-surface-50 dark:bg-surface-950">
       <Header
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         sidebarOpen={sidebarOpen}
@@ -348,7 +348,7 @@ export default function DashboardPage() {
               {/* Completed section */}
               {showCompleted && completedTasks.length > 0 && (
                 <div className="pt-4">
-                  <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-surface-400">
+                  <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500">
                     Completed ({completedTasks.length})
                   </h3>
                   <div className="space-y-2">
@@ -369,7 +369,7 @@ export default function DashboardPage() {
             {/* Empty state */}
             {tasks.length === 0 && (
               <div className="mt-12 text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-100">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-100 dark:bg-surface-800">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="28"
@@ -380,17 +380,17 @@ export default function DashboardPage() {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-surface-400"
+                    className="text-surface-400 dark:text-surface-500"
                   >
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="8" x2="12" y2="16" />
                     <line x1="8" y1="12" x2="16" y2="12" />
                   </svg>
                 </div>
-                <h3 className="text-sm font-medium text-surface-600">
+                <h3 className="text-sm font-medium text-surface-600 dark:text-surface-400">
                   No tasks for this day
                 </h3>
-                <p className="mt-1 text-xs text-surface-400">
+                <p className="mt-1 text-xs text-surface-400 dark:text-surface-500">
                   Click &quot;Add a task&quot; to get started
                 </p>
               </div>

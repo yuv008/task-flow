@@ -35,7 +35,7 @@ export default function FilterTabs({ filter, onChange, counts }: FilterTabsProps
               "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors",
               isActive
                 ? "bg-brand-600 text-white shadow-sm"
-                : "text-surface-500 hover:bg-surface-100"
+                : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800"
             )}
           >
             {tab.label}
@@ -44,7 +44,7 @@ export default function FilterTabs({ filter, onChange, counts }: FilterTabsProps
                 "rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none",
                 isActive
                   ? "bg-white/25 text-white"
-                  : "bg-surface-200 text-surface-600"
+                  : "bg-surface-200 dark:bg-surface-700 text-surface-600 dark:text-surface-400"
               )}
             >
               {counts[tab.value]}

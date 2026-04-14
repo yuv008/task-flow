@@ -50,10 +50,10 @@ export default function DateNav({
           </button>
 
           <div>
-            <h2 className="text-xl font-bold text-surface-900">
+            <h2 className="text-xl font-bold text-surface-900 dark:text-surface-50">
               {formatDateLabel(selectedDate)}
             </h2>
-            <p className="text-xs text-surface-400">
+            <p className="text-xs text-surface-400 dark:text-surface-500">
               {format(date, "EEEE, MMMM d, yyyy")}
             </p>
           </div>
@@ -97,13 +97,13 @@ export default function DateNav({
       {taskCount > 0 && (
         <div className="flex items-center gap-3">
           <div className="flex flex-1 items-center gap-2">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-surface-100">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-surface-100 dark:bg-surface-800">
               <div
                 className="h-full rounded-full bg-brand-500 transition-all duration-500"
                 style={{ width: `${completionPct}%` }}
               />
             </div>
-            <span className="shrink-0 text-xs font-medium text-surface-500">
+            <span className="shrink-0 text-xs font-medium text-surface-500 dark:text-surface-400">
               {completionPct}%&nbsp;&nbsp;{completedCount}/{taskCount}
             </span>
           </div>

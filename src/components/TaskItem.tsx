@@ -65,7 +65,7 @@ export default function TaskItem({
 
   // Determine the left border color based on priority and completion state
   const priorityBorderClass = task.completed
-    ? "border-l-4 border-surface-200"
+    ? "border-l-4 border-surface-200 dark:border-surface-700"
     : cn(
         "border-l-4",
         task.priority === "high" && "border-red-400",
@@ -96,7 +96,7 @@ export default function TaskItem({
           type="button"
           onClick={handleEnhance}
           disabled={enhancing || !editTitle.trim()}
-          className="mb-3 mt-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-50 disabled:opacity-50"
+          className="mb-3 mt-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-50 dark:hover:bg-brand-950/40 disabled:opacity-50"
         >
           {enhancing ? (
             <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +157,7 @@ export default function TaskItem({
             "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all",
             task.completed
               ? "border-emerald-500 bg-emerald-500 animate-check"
-              : "border-surface-300 hover:border-brand-400"
+              : "border-surface-300 dark:border-surface-600 hover:border-brand-400"
           )}
           aria-label={task.completed ? "Mark as pending" : "Mark as complete"}
         >
@@ -185,7 +185,7 @@ export default function TaskItem({
             <p
               className={cn(
                 "text-sm font-medium transition-all",
-                task.completed && "line-through text-surface-400"
+                task.completed && "line-through text-surface-400 dark:text-surface-500"
               )}
             >
               {task.title}
@@ -203,7 +203,7 @@ export default function TaskItem({
           {task.description && (
             <p
               className={cn(
-                "mt-0.5 text-xs text-surface-500 line-clamp-2",
+                "mt-0.5 text-xs text-surface-500 dark:text-surface-400 line-clamp-2",
                 task.completed && "line-through"
               )}
             >
@@ -217,7 +217,7 @@ export default function TaskItem({
           <button
             onClick={() => setShowMenu(!showMenu)}
             className={cn(
-              "flex h-7 w-7 items-center justify-center rounded-md text-surface-400 transition-opacity hover:bg-surface-100 hover:text-surface-600",
+              "flex h-7 w-7 items-center justify-center rounded-md text-surface-400 dark:text-surface-500 transition-opacity hover:bg-surface-100 dark:hover:bg-surface-800 hover:text-surface-600 dark:hover:text-surface-400",
               // Always visible on small screens (touch devices), hover-revealed on desktop
               "sm:opacity-0 sm:group-hover:opacity-100",
               // On mobile / touch screens: always visible
@@ -247,13 +247,13 @@ export default function TaskItem({
                 onClick={() => setShowMenu(false)}
                 aria-hidden="true"
               />
-              <div className="absolute right-0 top-8 z-20 w-36 animate-fade-in rounded-lg border bg-white py-1 shadow-lg">
+              <div className="absolute right-0 top-8 z-20 w-36 animate-fade-in rounded-lg border dark:border-surface-700 bg-white dark:bg-surface-800 py-1 shadow-lg">
                 <button
                   onClick={() => {
                     setShowMenu(false);
                     setIsEditing(true);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-surface-700 hover:bg-surface-50"
+                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -276,7 +276,7 @@ export default function TaskItem({
                     setShowMenu(false);
                     onDelete(task.id);
                   }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

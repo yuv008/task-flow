@@ -82,7 +82,7 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="flex w-full items-center gap-2 rounded-xl border-2 border-dashed border-surface-200 p-3 text-sm text-surface-400 transition-colors hover:border-brand-300 hover:text-brand-600"
+        className="flex w-full items-center gap-2 rounded-xl border-2 border-dashed border-surface-200 dark:border-surface-600 p-3 text-sm text-surface-400 dark:text-surface-500 transition-colors hover:border-brand-300 hover:text-brand-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -116,13 +116,13 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="What needs to be done?"
-        className="w-full border-0 bg-transparent text-sm font-medium text-surface-900 placeholder:text-surface-400 focus:outline-none focus:ring-0"
+        className="w-full border-0 bg-transparent text-sm font-medium text-surface-900 dark:text-surface-50 placeholder:text-surface-400 dark:placeholder:text-surface-500 focus:outline-none focus:ring-0"
       />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Add a description (optional)"
-        className="mt-2 w-full resize-none border-0 bg-transparent text-xs text-surface-600 placeholder:text-surface-400 focus:outline-none focus:ring-0"
+        className="mt-2 w-full resize-none border-0 bg-transparent text-xs text-surface-600 dark:text-surface-400 placeholder:text-surface-400 dark:placeholder:text-surface-500 focus:outline-none focus:ring-0"
         rows={2}
       />
       {title.trim() && (
@@ -130,7 +130,7 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
           type="button"
           onClick={handleEnhance}
           disabled={enhancing}
-          className="mt-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-50 disabled:opacity-50"
+          className="mt-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-brand-600 transition-colors hover:bg-brand-50 dark:hover:bg-brand-950/40 disabled:opacity-50"
         >
           {enhancing ? (
             <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +143,7 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
           {enhancing ? "Enhancing…" : "Enhance with AI"}
         </button>
       )}
-      <div className="mt-3 flex items-center justify-between border-t pt-3">
+      <div className="mt-3 flex items-center justify-between border-t dark:border-surface-700 pt-3">
         <div className="flex items-center gap-1">
           {(["low", "medium", "high"] as const).map((p) => (
             <button
@@ -153,11 +153,11 @@ export default function TaskForm({ date, onSubmit, openTrigger }: TaskFormProps)
               className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
                 priority === p
                   ? p === "high"
-                    ? "bg-red-100 text-red-700"
+                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
                     : p === "medium"
-                      ? "bg-amber-100 text-amber-700"
-                      : "bg-blue-100 text-blue-700"
-                  : "text-surface-400 hover:bg-surface-100"
+                      ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
+                      : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                  : "text-surface-400 dark:text-surface-500 hover:bg-surface-100 dark:hover:bg-surface-800"
               }`}
             >
               {p}

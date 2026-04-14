@@ -54,7 +54,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-surface-50 dark:bg-surface-950 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600">
@@ -73,23 +73,23 @@ export default function RegisterPage() {
               <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-surface-900">
+          <h1 className="text-2xl font-bold text-surface-900 dark:text-surface-50">
             Create your account
           </h1>
-          <p className="mt-1 text-sm text-surface-500">
+          <p className="mt-1 text-sm text-surface-500 dark:text-surface-400">
             Start managing your daily tasks
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="card p-6 space-y-4">
           {error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 animate-slide-down">
+            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 animate-slide-down dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
               {error}
             </div>
           )}
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-surface-700">
+            <label className="mb-1.5 block text-sm font-medium text-surface-700 dark:text-surface-300">
               Name
             </label>
             <input
@@ -103,7 +103,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-surface-700">
+            <label className="mb-1.5 block text-sm font-medium text-surface-700 dark:text-surface-300">
               Email
             </label>
             <input
@@ -117,7 +117,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-surface-700">
+            <label className="mb-1.5 block text-sm font-medium text-surface-700 dark:text-surface-300">
               Password
             </label>
             <div className="relative">
@@ -209,7 +209,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-surface-500">
+        <p className="mt-6 text-center text-sm text-surface-500 dark:text-surface-400">
           Already have an account?{" "}
           <Link
             href="/login"

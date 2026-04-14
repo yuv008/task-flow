@@ -29,6 +29,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/* Blocking script prevents flash of wrong theme on load */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
         <Providers>{children}</Providers>
         <PWARegister />
       </body>
