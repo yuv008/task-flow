@@ -22,6 +22,7 @@ export default function TaskItem({
   const [editDesc, setEditDesc] = useState(task.description || "");
   const [showMenu, setShowMenu] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleEnhance = useCallback(async () => {
     if (!editTitle.trim() || enhancing) return;
@@ -202,12 +203,18 @@ export default function TaskItem({
           </div>
           {task.description && (
             <p
+              onClick={() => setIsExpanded(!isExpanded)}
               className={cn(
-                "mt-0.5 text-xs text-surface-500 dark:text-surface-400 line-clamp-2",
+                "mt-0.5 text-xs text-surface-500 dark:text-surface-400 cursor-pointer select-none",
+                !isExpanded && "line-clamp-2",
                 task.completed && "line-through"
               )}
+              title={isExpanded ? "Click to collapse" : "Click to expand"}
             >
               {task.description}
+              {!isExpanded && (
+                <span className="ml-1 text-surface-400 dark:text-surface-500">↓</span>
+              )}
             </p>
           )}
         </div>

@@ -11,6 +11,7 @@ import TaskItem from "@/components/TaskItem";
 import TaskForm from "@/components/TaskForm";
 import Stats from "@/components/Stats";
 import FilterTabs from "@/components/FilterTabs";
+import WordOfDay from "@/components/WordOfDay";
 import Toast from "@/components/Toast";
 import { getTodayStr } from "@/lib/utils";
 import type { Task } from "@/types";
@@ -290,6 +291,8 @@ export default function DashboardPage() {
               taskCount={tasks.length}
               completedCount={completedCount}
             />
+
+            <WordOfDay />
 
             {/* Filter tabs */}
             <FilterTabs

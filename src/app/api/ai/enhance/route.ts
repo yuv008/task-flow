@@ -19,8 +19,8 @@ export async function POST(req: Request) {
     }
 
     const prompt = description?.trim()
-      ? `Task: "${title}"\nCurrent description: "${description}"\n\nImprove this description to be clear, specific, and actionable. Keep it concise (2-3 sentences max). Return only the improved description text, nothing else.`
-      : `Task: "${title}"\n\nWrite a clear, specific, and actionable description for this task. Keep it concise (2-3 sentences max). Return only the description text, nothing else.`;
+      ? `Task: "${title}"\nCurrent description: "${description}"\n\nImprove this description:\n1. Make it clear and specific\n2. Make it actionable\n3. Keep it concise (2–3 sentences max)\n\nReturn only the improved description text.`
+      : `Task: "${title}"\n\nWrite a description for this task:\n1. Clear and specific\n2. Actionable (start with a verb)\n3. Concise (2–3 sentences max)\n\nReturn only the description text.`;
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are a productivity assistant that writes clear, specific, and actionable task descriptions. Be concise and practical.",
+            "You are a productivity assistant. Your job:\n1. Write task descriptions that are:\n   - Clear and specific\n   - Actionable (starts with a verb)\n   - Concise (2–3 sentences max)\n2. Return only the description text — no explanations, no labels.",
         },
         { role: "user", content: prompt },
       ],
