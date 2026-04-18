@@ -5,14 +5,25 @@ import Groq from "groq-sdk";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export async function GET(req: Request) {
+// In-memory cache: persists for the lifetime of the server process.
+// Keyed by "YYYY-MM-DD" so it auto-invalidates the next day.
+const cache: { date: string; data: Record<string, string> } = {
+  date: "",
+  data: {},
+};
+
+export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Use the date as a seed hint so the word feels consistent per day
   const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+  // Return cached word if it's still today's
+  if (cache.date === today && cache.data.word) {
+    return NextResponse.json({ ...cache.data, date: today });
+  }
 
   try {
     const completion = await groq.chat.completions.create({
@@ -46,6 +57,10 @@ export async function GET(req: Request) {
     if (!parsed.word || !parsed.pos || !parsed.meaning || !parsed.sentence) {
       throw new Error("Invalid response shape");
     }
+
+    // Store in cache for the rest of the day
+    cache.date = today;
+    cache.data = parsed;
 
     return NextResponse.json({ ...parsed, date: today });
   } catch {
